@@ -5,6 +5,7 @@ cards.forEach(card => card.addEventListener('click', flipCard));
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
+let turns = 0;
 
 function flipCard() {
     if(lockBoard) return;
@@ -20,7 +21,8 @@ function flipCard() {
         // second click
         hasFlippedCard = false;
         secondCard = this;
-
+        turns += 1;
+        document.querySelector('.turns').innerHTML = 'TURNS: ' + turns;
         checkForMatch();
     }
 }
