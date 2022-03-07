@@ -1,11 +1,12 @@
 const cards = document.querySelectorAll('.memory-card');
 
-cards.forEach(card => card.addEventListener('click', flipCard));
-
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
 let turns = 0;
+let record = 100000;
+
+restart();
 
 function flipCard() {
     if(lockBoard) return;
@@ -59,9 +60,36 @@ function resetBoard() {
     [firstCard, secondCard] = [null, null];
 }
 
-(function shuffle() {
+function shuffle() {
     cards.forEach(card => {
         let randomPos = Math.floor(Math.random() * 12);
         card.style.order = randomPos;
     });
-})();
+}
+
+function restart() {
+    let check = true;
+
+    cards.forEach( card => {
+        if(!card.classList.contains('flip')) check = false;
+    });
+
+    if(check && turns < record ){
+       record = turns;
+       document.querySelector('.record').innerHTML = 'MY RECORD: ' + record;
+    }
+
+    turns = 0;
+    document.querySelector('.turns').innerHTML = 'TURNS: ' + turns;
+
+    cards.forEach( card => {
+        card.classList.remove('flip');
+    })
+
+    setTimeout(() => {
+        shuffle();
+    }, 1000);
+
+    cards.forEach(card => card.addEventListener('click', flipCard));
+    resetBoard();
+}
